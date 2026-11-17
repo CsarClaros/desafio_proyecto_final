@@ -1,0 +1,5 @@
+{
+  "compilerOptions": { "target": "ES2022", "module": "CommonJS", "moduleResolution": "node", "strict": true,
+  "skipLibCheck": true, "outDir": "./dist-test", "rootDir": "./src/app/numerical" },
+  "include": ["src/app/numerical/**/*.ts"]
+}

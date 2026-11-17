@@ -1,0 +1,67 @@
+digraph DER {
+  graph [rankdir=LR, splines=polyline, nodesep=0.42, ranksep=1.1, bgcolor="white", pad=0.3, fontname="DejaVu Sans"];
+  node [shape=plaintext, fontname="DejaVu Sans", fontsize=10];
+  edge [color="#42708f", penwidth=1.5, arrowsize=0.8, fontname="DejaVu Sans", fontsize=9];
+  caso [label=<
+   <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="8" COLOR="#d0dce8" BGCOLOR="#f7fbff">
+    <TR><TD BGCOLOR="#173650" COLSPAN="2"><FONT COLOR="white"><B>caso_estudio</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">id</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">nombre</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">modelo_version</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">descripcion</TD></TR>
+   </TABLE>>];
+  escenario [label=<
+   <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="8" COLOR="#d0dce8" BGCOLOR="#f7fbff">
+    <TR><TD BGCOLOR="#176f7b" COLSPAN="2"><FONT COLOR="white"><B>escenario</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">id</TD></TR>
+    <TR><TD ALIGN="LEFT"><B>FK</B></TD><TD ALIGN="LEFT">caso_id</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">tipo</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">parametros_json</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">fuente_datos</TD></TR>
+   </TABLE>>];
+  simulacion [label=<
+   <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="8" COLOR="#d0dce8" BGCOLOR="#f7fbff">
+    <TR><TD BGCOLOR="#173650" COLSPAN="2"><FONT COLOR="white"><B>simulacion</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">id</TD></TR>
+    <TR><TD ALIGN="LEFT"><B>FK</B></TD><TD ALIGN="LEFT">escenario_id</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">fecha</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">parametros_entrada_json</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">estado, modelo_version</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">usuario_equipo</TD></TR>
+   </TABLE>>];
+  ejecucion [label=<
+   <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="8" COLOR="#d0dce8" BGCOLOR="#f7fbff">
+    <TR><TD BGCOLOR="#176f7b" COLSPAN="2"><FONT COLOR="white"><B>ejecucion_metodo</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">id</TD></TR>
+    <TR><TD ALIGN="LEFT"><B>FK</B></TD><TD ALIGN="LEFT">simulacion_id</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">metodo</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">tolerancia, paso, max_iter</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">convergio, tiempo_ms</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">criterio_parada</TD></TR>
+   </TABLE>>];
+  iteracion [label=<
+   <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="8" COLOR="#d0dce8" BGCOLOR="#f7fbff">
+    <TR><TD BGCOLOR="#173650" COLSPAN="2"><FONT COLOR="white"><B>iteracion_resultado</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">id</TD></TR>
+    <TR><TD ALIGN="LEFT"><B>FK</B></TD><TD ALIGN="LEFT">ejecucion_id</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">numero</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">aproximacion_json</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">residual, error_abs, error_rel</TD></TR>
+   </TABLE>>];
+  resumen [label=<
+   <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="8" COLOR="#d0dce8" BGCOLOR="#f7fbff">
+    <TR><TD BGCOLOR="#173650" COLSPAN="2"><FONT COLOR="white"><B>resultado_resumen</B></FONT></TD></TR>
+    <TR><TD ALIGN="LEFT"><B>PK</B></TD><TD ALIGN="LEFT">id</TD></TR>
+    <TR><TD ALIGN="LEFT"><B>FK UNIQUE</B></TD><TD ALIGN="LEFT">ejecucion_id</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">referencia, valor_json</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">metrica_error_json</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">series_json</TD></TR>
+    <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">interpretacion</TD></TR>
+   </TABLE>>];
+  caso -> escenario [label="1 : N"];
+  escenario -> simulacion [label="1 : N"];
+  simulacion -> ejecucion [label="1 : N"];
+  ejecucion -> iteracion [label="1 : N"];
+  ejecucion -> resumen [label="1 : 0..1"];
+  {rank=same;iteracion;resumen;}
+}
